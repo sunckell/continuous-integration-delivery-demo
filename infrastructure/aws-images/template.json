@@ -1,0 +1,44 @@
+
+  "variables": {
+    "access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+    "secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+    "aws_region": "{{env `DEFAULT_REGION_NAME`}}"
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `access_key`}}",
+    "secret_key": "{{user `secret_key`}}",
+    "region": "{{user `aws_region`}}",
+    "source_ami": "ami-fce3c696",
+    "instance_type": "t2.micro",
+    "ssh_username": "ubuntu",
+    "ami_name": "cloud-principles {{timestamp}}"
+  }],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "custom/file",
+      "destination": "/tmp/file"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo 'ubuntu'|sudo -S sh '{{.Path}}'",
+      "override": {
+        "amazon-ebs": {
+          "scripts": [
+            "scripts/security.sh"
+          ]
+        }
+      }
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sleep 30",
+        "sudo apt-add-repository ppa:rquillo/ansible",
+        "sudo /usr/bin/apt-get update",
+        "sudo /usr/bin/apt-get -y install ansible"
+      ]
+    }
+  ]
+}
