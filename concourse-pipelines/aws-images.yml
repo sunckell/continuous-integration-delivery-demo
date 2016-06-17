@@ -1,0 +1,14 @@
+resources:
+- name: aws-images
+  type: git
+  source:
+    uri: https://github.com/sunckell/continuous-integration-delivery-demo
+    branch: master
+
+jobs:
+- name: build image
+  plan:
+  - get: 
+    trigger: true
+  - task: tests
+    file: 
