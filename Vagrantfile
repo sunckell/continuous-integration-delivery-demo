@@ -5,7 +5,8 @@ $script = <<SCRIPT
 echo "custom >> updating system and installing dependencies..."
 sudo apt-get update > /dev/null
 sudo apt-get -y upgrade > /dev/null
-sudo apt-get install -y unzip curl
+sudo apt-get install -y unzip curl awscli
+sudo apt-get clean
 
 echo
 echo "custom >> installing Hashicorp tooling..."
@@ -28,7 +29,6 @@ echo "custom >> installing packer..."
 unzip packer.zip
 sudo chmod +x packer 
 sudo mv packer /usr/bin/
-
 
 SCRIPT
 
@@ -55,8 +55,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       }
 
       n1.vm.post_up_message = post_up_message
-
+      
   end
-
-
+  
 end
